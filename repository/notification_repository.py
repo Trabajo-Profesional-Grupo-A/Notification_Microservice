@@ -12,11 +12,13 @@ collection.create_index([('email', 1)], unique=True)
 
 def post_device_token(device_token: DeviceTokenRequest):
     """
-    Post device token for a user.
+    Post or update a device token for a user.
     """
     try:
         request_device_token = dict(device_token)
-        collection.insert_one(request_device_token)
+        filter_query = {"email": request_device_token["email"]}
+        update_query = {"$set": request_device_token}
+        collection.update_one(filter_query, update_query, upsert=True)
     except Exception as e:
         raise ValueError(str(e))
 
