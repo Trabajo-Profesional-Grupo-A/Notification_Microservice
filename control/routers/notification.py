@@ -101,7 +101,7 @@ def api_send_notification(notification_request: NotificationRequest):
                 ),
                 token=device_token,
                 data= {
-                    "name": notification_request.name_sender,
+                    "name_sender": notification_request.name_sender,
                     "email_sender": notification_request.email_sender,
                     "email_receiver": email,
                     "type": notification_request.type
