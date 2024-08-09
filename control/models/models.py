@@ -13,7 +13,10 @@ class DeviceTokenRequest(BaseModel):
     device_token: str
 
 class NotificationRequest(BaseModel):
+    email_sender: str
     email_receivers: List[str]
     title: str
     body: str
     data: dict
+    type: str
+    name_sender: str
