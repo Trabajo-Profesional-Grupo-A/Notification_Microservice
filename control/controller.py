@@ -8,7 +8,6 @@ app = FastAPI(
 
 origins = ["*"]
 app.include_router(notification.router)
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,

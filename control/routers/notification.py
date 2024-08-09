@@ -2,6 +2,14 @@
 This module contains the API endpoints for the notifications service.
 """
 
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import messaging
+
+
+cred = credentials.Certificate("./tpp-grupoa-firebase-adminsdk-5jdgm-65be1e639d.json")
+firebase_admin.initialize_app(cred)
+
 from fastapi import (
     APIRouter,
     HTTPException,
@@ -12,7 +20,7 @@ from control.codes import (
     DEVICE_TOKEN_NOT_FOUND
 )
 
-from control.models.models import DeviceTokenRequest
+from control.models.models import DeviceTokenRequest, NotificationRequest
 from repository.notification_repository import get_device_token, post_device_token, delete_device_token
 
 router = APIRouter(
@@ -59,3 +67,26 @@ def api_delete_device_token(email: str):
 
 
 
+@router.post("/device-token/send")
+def api_send_notification(notification_request: NotificationRequest):
+    """
+    Send a notification to a user's device
+    """
+    try:
+        for email in notification_request.email_receivers:
+            device_token = get_device_token(email)
+            if device_token is None:
+                raise HTTPException(status_code=DEVICE_TOKEN_NOT_FOUND, detail="Device token not found for the user")
+
+            message = messaging.Message(
+                notification=messaging.Notification(
+                    title=notification_request.title,
+                    body=notification_request.body,
+                ),
+                data=notification_request.data,
+                token=device_token,
+            )
+            response = messaging.send(message)
+        return {"message": "Notifications sent successfully", "response": response}
+    except Exception as e:
+        raise HTTPException(status_code=BAD_REQUEST, detail=str(e))
