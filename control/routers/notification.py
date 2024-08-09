@@ -12,6 +12,8 @@ from firebase_admin import messaging
 #cred = credentials.Certificate("./tpp-grupoa-firebase-adminsdk-5jdgm-65be1e639d.json")
 #firebase_admin.initialize_app(cred)
 
+
+
 def initialize_firebase():
     if not firebase_admin._apps:
         # Decode the base64-encoded service account key
@@ -21,6 +23,7 @@ def initialize_firebase():
         cred = credentials.Certificate(service_account_info)
         firebase_admin.initialize_app(cred)
 
+initialize_firebase()
 
 
 from fastapi import (
