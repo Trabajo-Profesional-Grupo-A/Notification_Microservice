@@ -93,18 +93,17 @@ def api_send_notification(notification_request: NotificationRequest):
             if device_token is None:
                 raise HTTPException(status_code=DEVICE_TOKEN_NOT_FOUND, detail="Device token not found for the user")
 
+            notification_request.data["name_sender"] = notification_request.name_sender
+            notification_request.data["email_sender"] = notification_request.email_sender
+            notification_request.data["email_receiver"] = email
+            notification_request.data["type"] = notification_request.type
             message = messaging.Message(
                 notification=messaging.Notification(
                     title=notification_request.title,
                     body=notification_request.body,
                 ),
+                data=notification_request.data,
                 token=device_token,
-                data= {
-                    "name_sender": notification_request.name_sender,
-                    "email_sender": notification_request.email_sender,
-                    "email_receiver": email,
-                    "type": notification_request.type
-                }
             )
             response = messaging.send(message)
         return {"message": "Notifications sent successfully", "response": response}
