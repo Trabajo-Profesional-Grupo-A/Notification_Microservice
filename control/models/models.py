@@ -20,3 +20,4 @@ class NotificationRequest(BaseModel):
     data: dict
     type: str
     name_sender: str
+    avatar_sender: str

@@ -97,10 +97,12 @@ def api_send_notification(notification_request: NotificationRequest):
             notification_request.data["email_sender"] = notification_request.email_sender
             notification_request.data["email_receiver"] = email
             notification_request.data["type"] = notification_request.type
+            notification_request.data["image_url"] = notification_request.avatar_sender
             message = messaging.Message(
                 notification=messaging.Notification(
                     title=notification_request.title,
                     body=notification_request.body,
+                    image=notification_request.avatar_sender,
                 ),
                 data=notification_request.data,
                 token=device_token,
