@@ -97,7 +97,8 @@ def api_send_notification(notification_request: NotificationRequest):
             notification_request.data["email_sender"] = notification_request.email_sender
             notification_request.data["email_receiver"] = email
             notification_request.data["type"] = notification_request.type
-            notification_request.data["image_url"] = notification_request.avatar_sender
+            #si se quiere dar la opcion de mandar una imagen en la notificacion
+            #notification_request.data["image_url"] = notification_request.image
             message = messaging.Message(
                 notification=messaging.Notification(
                     title=notification_request.title,
